@@ -21,11 +21,13 @@ namespace Orleans.Providers
 
         private void ProcessNewAssembly(object sender, AssemblyLoadEventArgs args)
         {
+#if BUILD_FLAVOR_LEGACY
             // If the assembly is loaded for reflection only avoid processing it.
             if (args.LoadedAssembly.ReflectionOnly)
             {
                 return;
             }
+#endif
 
             // We do this under the lock to avoid race conditions when an assembly is added 
             // while a type manager is initializing.

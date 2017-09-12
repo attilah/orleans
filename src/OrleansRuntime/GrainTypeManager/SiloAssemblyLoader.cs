@@ -56,8 +56,11 @@ namespace Orleans.Runtime
             AssemblyLoaderPathNameCriterion[] excludeCriteria =
                 {
                     AssemblyLoaderCriteria.ExcludeResourceAssemblies,
+#if BUILD_FLAVOR_LEGACY
                     AssemblyLoaderCriteria.ExcludeSystemBinaries()
+#endif
                 };
+#if BUILD_FLAVOR_LEGACY
             AssemblyLoaderReflectionCriterion[] loadCriteria =
                 {
                     AssemblyLoaderReflectionCriterion.NewCriterion(
@@ -66,8 +69,14 @@ namespace Orleans.Runtime
                     AssemblyLoaderCriteria.LoadTypesAssignableFrom(
                         typeof(IProvider))
                 };
+#endif
 
+#if !BUILD_FLAVOR_LEGACY
+            AssemblyLoader.LoadAssemblies(directories, excludeCriteria, logger);
+#else
             AssemblyLoader.LoadAssemblies(directories, excludeCriteria, loadCriteria, logger);
+#endif
+
         }
 
         public IDictionary<string, GrainTypeData> GetGrainClassTypes()

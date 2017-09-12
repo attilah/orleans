@@ -43,7 +43,9 @@ namespace Orleans.Runtime
             IEnumerable<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies();
             if (!TryPerformUncachedTypeResolution(name, out type, assemblies)) return false;
 
+#if BUILD_FLAVOR_LEGACY
             if (type.Assembly.ReflectionOnly) throw new InvalidOperationException(string.Format("Type resolution for {0} yielded reflection-only type.", name));
+#endif
 
             return true;
         }

@@ -13,27 +13,37 @@ namespace Orleans.Runtime
     {
         private readonly Dictionary<string, SearchOption> dirEnumArgs;
         private readonly HashSet<AssemblyLoaderPathNameCriterion> pathNameCriteria;
+#if BUILD_FLAVOR_LEGACY
         private readonly HashSet<AssemblyLoaderReflectionCriterion> reflectionCriteria;
+#endif
         private readonly Logger logger;
 
         internal bool SimulateExcludeCriteriaFailure { get; set; }
         internal bool SimulateLoadCriteriaFailure { get; set; }
+#if BUILD_FLAVOR_LEGACY
         internal bool SimulateReflectionOnlyLoadFailure { get; set; }
+#endif
         internal bool RethrowDiscoveryExceptions { get; set; }
 
         private AssemblyLoader(
                 Dictionary<string, SearchOption> dirEnumArgs,
                 HashSet<AssemblyLoaderPathNameCriterion> pathNameCriteria,
+#if BUILD_FLAVOR_LEGACY
                 HashSet<AssemblyLoaderReflectionCriterion> reflectionCriteria,
+#endif
                 Logger logger)
         {
             this.dirEnumArgs = dirEnumArgs;
             this.pathNameCriteria = pathNameCriteria;
+#if BUILD_FLAVOR_LEGACY
             this.reflectionCriteria = reflectionCriteria;
+#endif
             this.logger = logger;
             SimulateExcludeCriteriaFailure = false;
             SimulateLoadCriteriaFailure = false;
+#if BUILD_FLAVOR_LEGACY
             SimulateReflectionOnlyLoadFailure = false;
+#endif
             RethrowDiscoveryExceptions = false;
         }
         
@@ -55,14 +65,18 @@ namespace Orleans.Runtime
         public static List<string> LoadAssemblies(
                 Dictionary<string, SearchOption> dirEnumArgs,
                 IEnumerable<AssemblyLoaderPathNameCriterion> pathNameCriteria,
+#if BUILD_FLAVOR_LEGACY
                 IEnumerable<AssemblyLoaderReflectionCriterion> reflectionCriteria,
+#endif
                 Logger logger)
         {
             var loader =
                 NewAssemblyLoader(
                     dirEnumArgs,
                     pathNameCriteria,
+#if BUILD_FLAVOR_LEGACY
                     reflectionCriteria,
+#endif
                     logger);
 
             int count = 0;
@@ -129,7 +143,9 @@ namespace Orleans.Runtime
         internal static AssemblyLoader NewAssemblyLoader(
                 Dictionary<string, SearchOption> dirEnumArgs,
                 IEnumerable<AssemblyLoaderPathNameCriterion> pathNameCriteria,
+#if BUILD_FLAVOR_LEGACY
                 IEnumerable<AssemblyLoaderReflectionCriterion> reflectionCriteria,
+#endif
                 Logger logger)
         {
             if (null == dirEnumArgs)
@@ -140,17 +156,21 @@ namespace Orleans.Runtime
                 ? new HashSet<AssemblyLoaderPathNameCriterion>() 
                 : new HashSet<AssemblyLoaderPathNameCriterion>(pathNameCriteria.Distinct());
 
+#if BUILD_FLAVOR_LEGACY
             if (null == reflectionCriteria || !reflectionCriteria.Any())
                 throw new ArgumentException("No assemblies will be loaded unless reflection criteria are specified.");
 
             var reflectionCriteriaSet = new HashSet<AssemblyLoaderReflectionCriterion>(reflectionCriteria.Distinct());
+#endif
             if (null == logger)
                 throw new ArgumentNullException("logger");
 
             return new AssemblyLoader(
                     dirEnumArgs,
                     pathNameCriteriaSet,
+#if BUILD_FLAVOR_LEGACY
                     reflectionCriteriaSet,
+#endif
                     logger);
         }
 
@@ -163,14 +183,18 @@ namespace Orleans.Runtime
                 if (dirEnumArgs.Count == 0)
                     throw new InvalidOperationException("Please specify a directory to search using the AddDirectory or AddRoot methods.");
 
+#if BUILD_FLAVOR_LEGACY
                 AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CachedReflectionOnlyTypeResolver.OnReflectionOnlyAssemblyResolve;
                 // the following explicit loop ensures that the finally clause is invoked
                 // after we're done enumerating.
+#endif
                 return EnumerateApprovedAssemblies();
             }
             finally
             {
+#if BUILD_FLAVOR_LEGACY
                 AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CachedReflectionOnlyTypeResolver.OnReflectionOnlyAssemblyResolve;
+#endif
             }
         }
 
@@ -217,7 +241,11 @@ namespace Orleans.Runtime
                         if (IsCompatibleWithCurrentProcess(j, out complaints))
                         {
                             if (logger.IsVerbose) logger.Verbose("Trying to pre-load {0} to reflection-only context.", j);
+#if !BUILD_FLAVOR_LEGACY
+                            Assembly.LoadFrom(j);
+#else
                             Assembly.ReflectionOnlyLoadFrom(j);
+#endif
                         }
                         else
                         {
@@ -284,9 +312,13 @@ namespace Orleans.Runtime
 
         private static Assembly MatchWithLoadedAssembly(AssemblyName searchFor, AppDomain appDomain)
         {
+#if !BUILD_FLAVOR_LEGACY
+            return MatchWithLoadedAssembly(searchFor, appDomain.GetAssemblies());
+#else
             return 
                 MatchWithLoadedAssembly(searchFor, appDomain.GetAssemblies()) ??
                 MatchWithLoadedAssembly(searchFor, appDomain.ReflectionOnlyGetAssemblies());
+#endif
         }
 
         private static Assembly MatchWithLoadedAssembly(AssemblyName searchFor)
@@ -339,12 +371,18 @@ namespace Orleans.Runtime
         {
             try
             {
+#if BUILD_FLAVOR_LEGACY
                 if (SimulateReflectionOnlyLoadFailure)
                     throw NewTestUnexpectedException();
+#endif
 
                 if (IsCompatibleWithCurrentProcess(pathName, out complaints))
                 {
+#if !BUILD_FLAVOR_LEGACY
+                    assembly = Assembly.LoadFrom(pathName);
+#else
                     assembly = Assembly.ReflectionOnlyLoadFrom(pathName);
+#endif
                 }
                 else
                 {
@@ -496,7 +534,9 @@ namespace Orleans.Runtime
                 return false;
             }
 
+#if BUILD_FLAVOR_LEGACY
             var criteriaComplaints = new List<string>();
+
             foreach (var i in reflectionCriteria)
             {
                 IEnumerable<string> complaints;
@@ -518,6 +558,7 @@ namespace Orleans.Runtime
             }
 
             LogComplaints(pathName, criteriaComplaints);
+#endif
             return false;
         }
 

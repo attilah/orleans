@@ -14,6 +14,7 @@ namespace UnitTests
         const string ExpectedFileName = "OrleansProviders.dll";
         private readonly Logger logger = LogManager.GetLogger("AssemblyLoaderTests", LoggerType.Application);
 
+#if BUILD_FLAVOR_LEGACY
         [Fact, TestCategory("AssemblyLoader"), TestCategory("BVT"), TestCategory("Functional")]
         public void AssemblyLoaderShouldDiscoverAssemblyLoaderTestAssembly()
         {
@@ -39,6 +40,7 @@ namespace UnitTests
                 () =>
                     DiscoverAssemblies(loader, exclusionList));
         }
+#endif
 
         [Fact, TestCategory("AssemblyLoader"), TestCategory("Functional")]
         public void AssemblyLoaderShouldDetectUnexpectedExceptionsDuringExcludeCriteria()
@@ -83,14 +85,20 @@ namespace UnitTests
             loader2.SimulateExcludeCriteriaFailure = true;
             DiscoverAssemblies(loader2, exclusionList, validate: false);
 
+#if BUILD_FLAVOR_LEGACY
             var loader3 = NewAssemblyLoader(exclusionList);
             loader3.SimulateReflectionOnlyLoadFailure = true;
             DiscoverAssemblies(loader3, exclusionList, validate: false);
+#endif
         }
 
         private List<string> NewExclusionList()
         {
+#if !BUILD_FLAVOR_LEGACY
+            var exclusionList = new List<string>();
+#else
             var exclusionList = new List<string>(AssemblyLoaderCriteria.SystemBinariesList);
+#endif
             exclusionList.Add("UnitTests.dll");
             return exclusionList;
         }
@@ -121,13 +129,19 @@ namespace UnitTests
                         AssemblyLoaderCriteria.ExcludeResourceAssemblies,
                         AssemblyLoaderCriteria.ExcludeFileNames(exclusionList)
                     };
+#if BUILD_FLAVOR_LEGACY
             var loadProvidersCriteria =
                 new AssemblyLoaderReflectionCriterion[]
                     {
                         AssemblyLoaderCriteria.LoadTypesAssignableFrom(typeof(IProvider))
                     };
+#endif
 
+#if !BUILD_FLAVOR_LEGACY
+            return AssemblyLoader.NewAssemblyLoader(directories, excludeCriteria, logger);
+#else
             return AssemblyLoader.NewAssemblyLoader(directories, excludeCriteria, loadProvidersCriteria, logger);
+#endif
         }
 
         private void DiscoverAssemblies(AssemblyLoader loader, List<string> exclusionList, bool validate = true)

@@ -24,6 +24,7 @@ namespace Orleans.Runtime
                     }
                 });
 
+#if BUILD_FLAVOR_LEGACY
         internal static AssemblyLoaderReflectionCriterion LoadTypesAssignableFrom(Type[] requiredTypes)
         {
             // any types provided must be converted to reflection-only
@@ -58,7 +59,9 @@ namespace Orleans.Runtime
         {
             return LoadTypesAssignableFrom(new [] {requiredType});
         }
+#endif
 
+#if BUILD_FLAVOR_LEGACY
         internal static readonly string[] 
             SystemBinariesList = 
                 new string[]
@@ -71,6 +74,7 @@ namespace Orleans.Runtime
         {
             return ExcludeFileNames(SystemBinariesList);
         }
+#endif
 
         private static AssemblyLoaderPathNameCriterion GetFileNameCriterion(IEnumerable<string> list, bool includeList)
         {

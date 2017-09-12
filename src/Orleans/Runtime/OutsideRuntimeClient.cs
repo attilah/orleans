@@ -219,16 +219,24 @@ namespace Orleans
                 new AssemblyLoaderPathNameCriterion[]
                     {
                         AssemblyLoaderCriteria.ExcludeResourceAssemblies,
+#if BUILD_FLAVOR_LEGACY
                         AssemblyLoaderCriteria.ExcludeSystemBinaries()
+#endif
                     };
+#if BUILD_FLAVOR_LEGACY
             var loadProvidersCriteria =
                 new AssemblyLoaderReflectionCriterion[]
                     {
                         AssemblyLoaderCriteria.LoadTypesAssignableFrom(typeof(IProvider))
                     };
+#endif
 
             this.assemblyProcessor.Initialize();
+#if !BUILD_FLAVOR_LEGACY
+            AssemblyLoader.LoadAssemblies(directories, excludeCriteria, logger);
+#else
             AssemblyLoader.LoadAssemblies(directories, excludeCriteria, loadProvidersCriteria, logger);
+#endif
         }
 
         private void UnhandledException(ISchedulingContext context, Exception exception)
@@ -583,7 +591,7 @@ namespace Orleans
             transport.Reconnect();
         }
 
-        #region Implementation of IRuntimeClient
+#region Implementation of IRuntimeClient
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
             Justification = "CallbackData is IDisposable but instances exist beyond lifetime of this method so cannot Dispose yet.")]
@@ -826,7 +834,7 @@ namespace Orleans
                 throw new ArgumentException("Reference is not associated with a local object.", "reference");
         }
 
-        #endregion Implementation of IRuntimeClient
+#endregion Implementation of IRuntimeClient
 
         private void CurrentDomain_DomainUnload(object sender, EventArgs e)
         {

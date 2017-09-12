@@ -1,3 +1,4 @@
+#if BUILD_FLAVOR_LEGACY
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -142,3 +143,4 @@ namespace Orleans.Runtime
         }
     }
 }
+#endif
