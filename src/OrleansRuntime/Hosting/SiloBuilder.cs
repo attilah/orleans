@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Orleans.Runtime;
+using Microsoft.Orleans.ApplicationParts;
 
 namespace Orleans.Hosting
 {
@@ -11,6 +12,7 @@ namespace Orleans.Hosting
     public class SiloBuilder : ISiloBuilder
     {
         private readonly ServiceProviderBuilder serviceProviderBuilder = new ServiceProviderBuilder();
+        private readonly ApplicationPartManager partManager = new ApplicationPartManager();
         private bool built;
 
         /// <inheritdoc />
@@ -30,6 +32,12 @@ namespace Orleans.Hosting
                     services.TryAddSingleton<Silo>(sp => new Silo(sp.GetRequiredService<SiloInitializationParameters>(), sp));
                 });
             this.serviceProviderBuilder.ConfigureServices(DefaultSiloServices.AddDefaultServices);
+
+            this.serviceProviderBuilder.ConfigureServices(services =>
+            {
+                services.TryAddSingleton(partManager);
+            });
+            
             var serviceProvider = this.serviceProviderBuilder.BuildServiceProvider();
             
             // Construct and return the silo.
@@ -56,5 +64,7 @@ namespace Orleans.Hosting
             this.serviceProviderBuilder.ConfigureContainer(configureContainer);
             return this;
         }
+
+        public ApplicationPartManager PartManager => partManager;
     }
 }

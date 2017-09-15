@@ -33,6 +33,7 @@ using Orleans.Streams;
 using Orleans.Transactions;
 using Orleans.Runtime.Versions;
 using Orleans.Versions;
+using Microsoft.Orleans.ApplicationParts;
 
 namespace Orleans.Runtime
 {

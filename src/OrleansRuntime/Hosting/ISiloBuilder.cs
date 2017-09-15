@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Orleans.ApplicationParts;
 
 namespace Orleans.Hosting
 {
@@ -35,5 +36,11 @@ namespace Orleans.Hosting
         /// <typeparam name="TContainerBuilder">The container builder type.</typeparam>
         /// <param name="configureContainer">The container builder configuration delegate.</param>
         ISiloBuilder ConfigureContainer<TContainerBuilder>(Action<TContainerBuilder> configureContainer);
+
+        /// <summary>
+        /// Gets the <see cref="ApplicationPartManager"/> where <see cref="ApplicationPart"/>s
+        /// are configured.
+        /// </summary>
+        ApplicationPartManager PartManager { get; }
     }
 }

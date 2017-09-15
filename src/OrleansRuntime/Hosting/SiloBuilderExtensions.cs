@@ -2,6 +2,8 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Orleans.Runtime;
 using Orleans.Runtime.Configuration;
+using System.Reflection;
+using Microsoft.Orleans.ApplicationParts;
 
 namespace Orleans.Hosting
 {
@@ -92,6 +94,42 @@ namespace Orleans.Hosting
         {
             if (configureServiceProvider == null) throw new ArgumentNullException(nameof(configureServiceProvider));
             return builder.UseServiceProviderFactory(new DelegateServiceProviderFactory(configureServiceProvider));
+        }
+
+        public static ISiloBuilder AddApplicationPart(this ISiloBuilder builder, Assembly assembly)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            if (assembly == null)
+            {
+                throw new ArgumentNullException(nameof(assembly));
+            }
+
+            builder.ConfigureApplicationPartManager(manager => manager.ApplicationParts.Add(new AssemblyPart(assembly)));
+
+            return builder;
+        }
+
+        public static ISiloBuilder ConfigureApplicationPartManager(
+            this ISiloBuilder builder,
+            Action<ApplicationPartManager> setupAction)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            if (setupAction == null)
+            {
+                throw new ArgumentNullException(nameof(setupAction));
+            }
+
+            setupAction(builder.PartManager);
+
+            return builder;
         }
     }
 }
