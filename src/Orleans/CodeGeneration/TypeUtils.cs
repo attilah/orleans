@@ -15,9 +15,9 @@ namespace Orleans.Runtime
     internal static class TypeUtils
     {
         /// <summary>
-        /// The assembly name of the core Orleans assembly.
+        /// The assembly name of the core Orleans abstractions assembly.
         /// </summary>
-        private static readonly AssemblyName OrleansCoreAssembly = typeof(RuntimeVersion).GetTypeInfo().Assembly.GetName();
+        private static readonly AssemblyName OrleansAbstractionsAssembly = typeof(IGrain).GetTypeInfo().Assembly.GetName();
 
         private static readonly ConcurrentDictionary<Tuple<Type, TypeFormattingOptions>, string> ParseableNameCache = new ConcurrentDictionary<Tuple<Type, TypeFormattingOptions>, string>();
 
@@ -1070,8 +1070,8 @@ namespace Orleans.Runtime
             // We want to be loosely coupled to the assembly version if an assembly depends on an older Orleans,
             // but we want a strong assembly match for the Orleans binary itself 
             // (so we don't load 2 different versions of Orleans by mistake)
-            return DoReferencesContain(assembly.GetReferencedAssemblies(), OrleansCoreAssembly)
-                   || string.Equals(assembly.GetName().FullName, OrleansCoreAssembly.FullName, StringComparison.Ordinal);
+            return DoReferencesContain(assembly.GetReferencedAssemblies(), OrleansAbstractionsAssembly)
+                   || string.Equals(assembly.GetName().FullName, OrleansAbstractionsAssembly.FullName, StringComparison.Ordinal);
         }
 
         /// <summary>
