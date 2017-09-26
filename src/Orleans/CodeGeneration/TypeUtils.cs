@@ -1070,24 +1070,52 @@ namespace Orleans.Runtime
             // We want to be loosely coupled to the assembly version if an assembly depends on an older Orleans,
             // but we want a strong assembly match for the Orleans binary itself 
             // (so we don't load 2 different versions of Orleans by mistake)
-            return DoReferencesContain(assembly.GetReferencedAssemblies(), OrleansAbstractionsAssembly)
+            return DoReferencesContain(GetReferencedAssemblyNames(assembly), OrleansAbstractionsAssembly)
                    || string.Equals(assembly.GetName().FullName, OrleansAbstractionsAssembly.FullName, StringComparison.Ordinal);
         }
 
-        /// <summary>
-        /// Returns a value indicating whether or not the specified references contain the provided assembly name.
-        /// </summary>
-        /// <param name="references">The references.</param>
-        /// <param name="assemblyName">The assembly name.</param>
-        /// <returns>A value indicating whether or not the specified references contain the provided assembly name.</returns>
-        private static bool DoReferencesContain(IReadOnlyCollection<AssemblyName> references, AssemblyName assemblyName)
+        private static HashSet<string> GetReferencedAssemblyNames(Assembly assembly)
         {
-            if (references.Count == 0)
+            var result = new HashSet<string>(StringComparer.Ordinal);
+            var queue = new Queue<Assembly>();
+
+            queue.Enqueue(assembly);
+
+            while (queue.Count>0)
+            {
+                var currentAssembly = queue.Dequeue();
+
+                foreach (var referenceAssemblyName in currentAssembly.GetReferencedAssemblies())
+                {
+                    try
+                    {
+                        var referenceAssembly = Assembly.Load(referenceAssemblyName);
+
+                        if (!result.Contains(referenceAssembly.GetName().Name))
+                        {
+                            queue.Enqueue(referenceAssembly);
+
+                            result.Add(referenceAssembly.GetName().Name);
+                        }
+                    }
+                    catch
+                    {
+                        // Intentionally left blank
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private static bool DoReferencesContain(HashSet<string> references, AssemblyName assemblyName)
+        {
+            if (references.Count== 0)
             {
                 return false;
             }
 
-            return references.Any(asm => string.Equals(asm.Name, assemblyName.Name, StringComparison.Ordinal));
+            return references.Contains(assemblyName.Name);
         }
 
         /// <summary>Returns the types referenced by the provided <paramref name="type"/>.</summary>
