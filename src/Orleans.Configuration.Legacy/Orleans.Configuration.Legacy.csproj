@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>Microsoft.Orleans.Configuration.Legacy</PackageId>
+    <Title>Microsoft Orleans Legacy Configuration</Title>
+    <Description>Legacy support library to support the usage of old configuration classes.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AssemblyName>Microsoft.Orleans.Configuration.Legacy</AssemblyName>
+    <RootNamespace>Orleans.Configuration.Legacy</RootNamespace>
+    <OrleansBuildTimeCodeGen>true</OrleansBuildTimeCodeGen>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Orleans\Orleans.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstraction" Version="$(MicrosoftExtensionsDependencyInjectionVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="$(MicrosoftExtensionsOptionsConfigurationExtensionsVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="$(MicrosoftExtensionsOptionsVersion)" />
+  </ItemGroup>
+
+</Project>
