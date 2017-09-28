@@ -8,7 +8,7 @@
   <PropertyGroup>
     <AssemblyName>Orleans</AssemblyName>
     <RootNamespace>Orleans</RootNamespace>
-    <OrleansBuildTimeCodeGen Condition="'$(Bootstrap)' != 'true'">true</OrleansBuildTimeCodeGen>
+<!--    <OrleansBuildTimeCodeGen Condition="'$(Bootstrap)' != 'true'">true</OrleansBuildTimeCodeGen>-->
   </PropertyGroup>
 
   <ItemGroup>
@@ -54,9 +54,33 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Orleans.Core.Abstractions\Orleans.Core.Abstractions.csproj" />
+<!--    <ProjectReference Include="..\Orleans.Core.Abstractions\Orleans.Core.Abstractions.csproj" Condition="'$(BuildingBootstrap)'==''" />-->
+<!--    <Reference Include="Orleans.Core.Abstractions" Condition="'$(BuildingBootstrap)'=='true'">
+      <HintPath>W:\Workspaces\Private\orleans\BS\Orleans.Core.Abstractions\ref\Microsoft.Orleans.Core.Abstractions.dll</HintPath>
+      <Private>False</Private>
+    </Reference>-->
   </ItemGroup>
+<!--
+    <ItemGroup Condition="'$(BuildingBootstrap)'=='true'">
+      <ReferencePath Include="W:\Workspaces\Private\orleans\BS\Orleans.Core.Abstractions\ref\Microsoft.Orleans.Core.Abstractions.dll" />
+      <_ResolveAssemblyReferenceResolvedFiles Include="W:\Workspaces\Private\orleans\BS\Orleans.Core.Abstractions\ref\Microsoft.Orleans.Core.Abstractions.dll" />
+    </ItemGroup>
+-->
+  <Target Name="Bubu" BeforeTargets="ResolveReferences" DependsOnTargets="GetReferenceAssemblyPaths">
+    <ItemGroup>
+<!--      <ReferencePath Include="W:\Workspaces\Private\orleans\BS\Orleans.Core.Abstractions\ref\Microsoft.Orleans.Core.Abstractions.dll" />
+      <_ResolveAssemblyReferenceResolvedFiles Include="W:\Workspaces\Private\orleans\BS\Orleans.Core.Abstractions\ref\Microsoft.Orleans.Core.Abstractions.dll" />-->
+      <ReferencePath Include="W:\Workspaces\Private\orleans\BS\obj\Orleans.Core.Abstractions\Debug\ref\Microsoft.Orleans.Core.Abstractions.dll" />
+      <_ResolveAssemblyReferenceResolvedFiles Include="W:\Workspaces\Private\orleans\BS\obj\Orleans.Core.Abstractions\Debug\ref\Microsoft.Orleans.Core.Abstractions.dll" />
+    </ItemGroup>
 
+    <Message Importance="High" Text="!!!!!!!!!!!!!!!!!" />
+    <Message Importance="High" Text="@(_ResolveAssemblyReferenceResolvedFiles)" />
+    <Message Importance="High" Text="!!!!!!!!!!!!!!!!!" />
+   
+  </Target>
+
+<!--
   <PropertyGroup>
     <OrleansBootstrapSteps>
       OrleansDllBootstrapUsingCodeGen
@@ -68,14 +92,12 @@
   <Target Name="OrleansDllBootstrapUsingCodeGen" Inputs="@(ReferencePath)" Outputs="$(IntermediateOutputPath)$(TargetName).orleans.g.cs" Condition="'$(Bootstrap)' != 'true'">
     <Message Text="[OrleansDllBootstrapUsingCodeGen] - Building ClientGenerator start" Importance="high" />
     <PropertyGroup>
-      <!-- Visual Studio or MsBuild .sln build -->
       <BootstrapOutputPath>$(SourceRoot)/Bootstrap/$(Configuration)/</BootstrapOutputPath>
       <ExcludeCodeGen>$(DefineConstants);EXCLUDE_CODEGEN;ORLEANS_BOOTSTRAP</ExcludeCodeGen>
     </PropertyGroup>
     <Message Text="[OrleansDllBootstrapUsingCodeGen] - OutputPath: $(BootstrapOutputPath)" Importance="high" />
-    <!-- Compile code generator -->
     <MSBuild Projects="$(ProjectDir)..\ClientGenerator\BootstrapCodegen.proj" Properties="BootstrapOutputPath=$(BootstrapOutputPath);Bootstrap=true" Targets="Build" UnloadProjectsOnCompletion="true" UseResultsCache="false" BuildInParallel="true" />
-    <!-- Finally invoke code generator on the recently built Orleans.dll -->
     <Message Text="[OrleansDllBootstrapUsingCodeGen] - Building ClientGenerator finished" Importance="high" />
   </Target>
+-->
 </Project>

@@ -1,0 +1,75 @@
+<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="Build">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <BootstrapFolder>W:\Workspaces\Private\orleans\BS\</BootstrapFolder>
+    <BootstrapTargets>Restore;Build</BootstrapTargets>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CoreCompileDependsOn>
+      BuildAbstractions;
+      BuildOrleans;
+      BuildCodeGenerator;
+      BuildClientGenerator;
+      $(CoreCompileDependsOn)
+    </CoreCompileDependsOn>
+  </PropertyGroup>
+
+  <Target Name="BuildAbstractions" DependsOnTargets="ResolveReferences" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <BootstrapProject Include="..\Orleans.Core.Abstractions\Orleans.Core.Abstractions.csproj">
+        <Properties>
+          BuildingBootstrap=true;
+          IntermediateOutputRoot=$(BootstrapFolder)\obj\Orleans.Core.Abstractions;
+          IntermediateOutputPath=$(BootstrapFolder)\obj\Orleans.Core.Abstractions\$(Configuration)\;
+          OutputPath=$(BootstrapFolder)\Orleans.Core.Abstractions;
+          OutDir=$(BootstrapFolder)\Orleans.Core.Abstractions\;
+          ProduceReferenceAssembly=true;
+          _FindDependencies=false
+        </Properties>
+      </BootstrapProject>
+    </ItemGroup>
+    <MSBuild Projects="@(BootstrapProject)" Targets="$(BootstrapTargets)" UnloadProjectsOnCompletion="true" UseResultsCache="false" BuildInParallel="false" />
+  </Target>
+
+  <Target Name="BuildOrleans" DependsOnTargets="BuildAbstractions" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <BootstrapProject2 Include="..\Orleans\Orleans.csproj">
+        <Properties>
+          BuildingBootstrap=true;
+          IntermediateOutputRoot=$(BootstrapFolder)\obj\Orleans;
+          IntermediateOutputPath=$(BootstrapFolder)\obj\Orleans\$(Configuration)\;
+          OutputPath=$(BootstrapFolder)\Orleans;
+          OutDir=$(BootstrapFolder)\Orleans\;
+          ProduceReferenceAssembly=true;
+          _FindDependencies=false
+        </Properties>
+      </BootstrapProject2>
+    </ItemGroup>
+    <MSBuild Projects="@(BootstrapProject2)" Targets="$(BootstrapTargets)" UnloadProjectsOnCompletion="true" UseResultsCache="false" BuildInParallel="false" />
+  </Target>
+
+  <Target Name="BuildOrleans2" DependsOnTargets="BuildAbstractions" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <BootstrapProject Include="..\Orleans\Orleans.csproj">
+        <Properties>
+          BuildingBootstrap=true;
+          IntermediateOutputRoot=$(BootstrapFolder)\obj\Orleans;
+          IntermediateOutputPath=$(BootstrapFolder)\obj\Orleans\Release\;
+          OutputPath=$(BootstrapFolder)\Orleans;
+          OutDir=$(BootstrapFolder)\Orleans\;
+          ProduceReferenceAssembly=true;
+        </Properties>
+      </BootstrapProject>
+    </ItemGroup>
+<!--    <MSBuild Projects="@(BootstrapProject)" Targets="$(BootstrapTargets)" UnloadProjectsOnCompletion="true" UseResultsCache="false" BuildInParallel="false" />-->
+  </Target>
+
+  <Target Name="BuildCodeGenerator" DependsOnTargets="BuildOrleans" BeforeTargets="CoreCompile">
+  </Target>
+
+  <Target Name="BuildClientGenerator" DependsOnTargets="BuildCodeGenerator" BeforeTargets="CoreCompile">
+  </Target>
+
+</Project>

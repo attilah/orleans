@@ -74,7 +74,7 @@ call %_dotnet% restore %BUILD_FLAGS% /bl:%CURRENT_CONFIGURATION%-Restore.binlog 
 call %_dotnet% build %BUILD_FLAGS% /bl:%CURRENT_CONFIGURATION%-Build.binlog /p:Configuration=%CURRENT_CONFIGURATION% "%SOLUTION%"
 @if ERRORLEVEL 1 GOTO :ErrorStop
 @echo BUILD ok for %CURRENT_CONFIGURATION% %SOLUTION%
-
+goto :eof
 call %_dotnet% pack --no-build %BUILD_FLAGS% /bl:%CURRENT_CONFIGURATION%-Pack.binlog /p:Configuration=%CURRENT_CONFIGURATION%;VersionDateSuffix=%DATE_SUFFIX% "%SOLUTION%"
 @if ERRORLEVEL 1 GOTO :ErrorStop
 @echo PACKAGE ok for %CURRENT_CONFIGURATION% %SOLUTION%
