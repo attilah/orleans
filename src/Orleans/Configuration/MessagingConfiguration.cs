@@ -327,5 +327,57 @@ namespace Orleans.Runtime.Configuration
                 }
             }
         }
+
+        internal T CreateMessagingOptions<T>() where T : MessagingOptions
+        {
+            MessagingOptions options;
+
+            if (isSiloConfig)
+            {
+                options = new SiloMessagingOptions();
+            }
+            else
+            {
+                options = new ClientMessagingOptions();
+            }
+
+            options.OpenConnectionTimeout = this.OpenConnectionTimeout;
+            options.ResponseTimeout = this.ResponseTimeout;
+            options.MaxResendCount = this.MaxResendCount;
+            options.ResendOnTimeout = this.ResendOnTimeout;
+            options.MaxSocketAge = this.MaxSocketAge;
+            options.DropExpiredMessages = this.DropExpiredMessages;
+            options.BufferPoolBufferSize = this.BufferPoolBufferSize;
+            options.BufferPoolMaxSize = this.BufferPoolMaxSize;
+            options.BufferPoolPreallocationSize = this.BufferPoolPreallocationSize;
+
+            if (isSiloConfig)
+            {
+                var siloOptions = (SiloMessagingOptions)options;
+
+                siloOptions.SiloSenderQueues = this.SiloSenderQueues;
+                siloOptions.GatewaySenderQueues = this.GatewaySenderQueues;
+                siloOptions.MaxForwardCount = this.MaxForwardCount;
+                siloOptions.ClientDropTimeout = this.ClientDropTimeout;
+            }
+            else
+            {
+                var clientOptions = (ClientMessagingOptions)options;
+
+                 clientOptions.ClientSenderBuckets = this.ClientSenderBuckets;
+            }
+
+            return (T)options;
+        }
+
+        internal SerializationProviderOptions CreateSerializationProviderOptions()
+        {
+            var options = new SerializationProviderOptions();
+
+            options.SerializationProviders = this.SerializationProviders;
+            options.FallbackSerializationProvider = this.FallbackSerializationProvider;
+
+            return options;
+        }
     }
 }

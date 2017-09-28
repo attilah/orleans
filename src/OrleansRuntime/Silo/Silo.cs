@@ -33,6 +33,7 @@ using Orleans.Streams;
 using Orleans.Transactions;
 using Orleans.Runtime.Versions;
 using Orleans.Versions;
+using Microsoft.Extensions.Options;
 
 namespace Orleans.Runtime
 {
@@ -202,7 +203,8 @@ namespace Orleans.Runtime
             this.assemblyProcessor = this.Services.GetRequiredService<AssemblyProcessor>();
             this.assemblyProcessor.Initialize();
 
-            BufferPool.InitGlobalBufferPool(GlobalConfig);
+            var siloMessagingOptions = this.Services.GetRequiredService<IOptions<SiloMessagingOptions>>();
+            BufferPool.InitGlobalBufferPool(siloMessagingOptions);
             //init logger for UnobservedExceptionsHandlerClass
             UnobservedExceptionsHandlerClass.InitLogger(this.loggerFactory);
             if (!UnobservedExceptionsHandlerClass.TrySetUnobservedExceptionHandler(UnobservedExceptionHandler))

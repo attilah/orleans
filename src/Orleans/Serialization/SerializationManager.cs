@@ -19,6 +19,7 @@ using Orleans.CodeGeneration;
 using Orleans.Concurrency;
 using Orleans.Runtime;
 using Orleans.Runtime.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Orleans.Serialization
 {
@@ -131,10 +132,10 @@ namespace Orleans.Serialization
 
         #region Static initialization
         
-        public SerializationManager(IServiceProvider serviceProvider, IMessagingConfiguration config, ITraceConfiguration traceConfig, ILoggerFactory loggerFactory)
+        public SerializationManager(IServiceProvider serviceProvider, IOptions<SerializationProviderOptions> config, ITraceConfiguration traceConfig, ILoggerFactory loggerFactory)
         {
-            var serializationProviders = config.SerializationProviders;
-            var fallbackType = config.FallbackSerializationProvider;
+            var serializationProviders = config.Value.SerializationProviders;
+            var fallbackType = config.Value.FallbackSerializationProvider;
             this.LargeObjectSizeThreshold = Constants.LARGE_OBJECT_HEAP_THRESHOLD;
             this.serializationContext = new ThreadLocal<SerializationContext>(() => new SerializationContext(this));
             this.deserializationContext = new ThreadLocal<DeserializationContext>(() => new DeserializationContext(this));

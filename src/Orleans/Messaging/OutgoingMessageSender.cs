@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Orleans.Runtime;
 using Orleans.Runtime.Configuration;
 using Orleans.Serialization;
-
+using Microsoft.Extensions.Options;
 
 namespace Orleans.Messaging
 {
@@ -21,7 +21,7 @@ namespace Orleans.Messaging
     {
         private readonly SerializationManager serializationManager;
 
-        internal OutgoingMessageSender(string nameSuffix, IMessagingConfiguration config, SerializationManager serializationManager, ILoggerFactory loggerFactory)
+        internal OutgoingMessageSender(string nameSuffix, IOptions<MessagingOptions> config, SerializationManager serializationManager, ILoggerFactory loggerFactory)
             : base(nameSuffix, config, loggerFactory)
         {
             this.serializationManager = serializationManager;

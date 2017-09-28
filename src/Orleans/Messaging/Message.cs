@@ -300,7 +300,7 @@ namespace Orleans.Runtime
             }
         }
 
-        public bool IsExpirableMessage(IMessagingConfiguration config)
+        public bool IsExpirableMessage(MessagingOptions config)
         {
             if (!config.DropExpiredMessages) return false;
 
@@ -342,7 +342,7 @@ namespace Orleans.Runtime
         }
 
         // Resends are used by the sender, usualy due to en error to send or due to a transient rejection.
-        public bool MayResend(IMessagingConfiguration config)
+        public bool MayResend(MessagingOptions config)
         {
             return ResendCount < config.MaxResendCount;
         }

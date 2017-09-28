@@ -55,6 +55,7 @@ namespace Orleans.Hosting
                     var initializationParams = sp.GetRequiredService<SiloInitializationParameters>();
                     return () => initializationParams.NodeConfig;
                 });
+            
             services.TryAddFromExisting<IMessagingConfiguration, GlobalConfiguration>();
             services.TryAddFromExisting<ITraceConfiguration, NodeConfiguration>();
             services.TryAddSingleton<TelemetryManager>();

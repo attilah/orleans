@@ -3,16 +3,17 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Orleans.Runtime.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Orleans.Runtime
 {
     internal abstract class AsynchQueueAgent<T> : AsynchAgent, IDisposable where T : IOutgoingMessage
     {
-        private readonly IMessagingConfiguration config;
+        private readonly IOptions<MessagingOptions> config;
         private BlockingCollection<T> requestQueue;
         private QueueTrackingStatistic queueTracking;
 
-        protected AsynchQueueAgent(string nameSuffix, IMessagingConfiguration cfg, ILoggerFactory loggerFactory)
+        protected AsynchQueueAgent(string nameSuffix, IOptions<MessagingOptions> cfg, ILoggerFactory loggerFactory)
             : base(nameSuffix, loggerFactory)
         {
             config = cfg;

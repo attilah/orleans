@@ -16,6 +16,7 @@ using Orleans.Runtime.Configuration;
 using Orleans.Serialization;
 using Orleans.Streams;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Orleans
 {
@@ -27,6 +28,7 @@ namespace Orleans
         private Logger callBackDataLogger;
         private ILogger timerLogger;
         private ClientConfiguration config;
+        private IOptions<ClientMessagingOptions> clientMessagingOptions;
 
         private readonly ConcurrentDictionary<CorrelationId, CallbackData> callbacks;
         private readonly ConcurrentDictionary<GuidId, LocalObjectData> localObjects;
@@ -129,6 +131,8 @@ namespace Orleans
             this.messageFactory = this.ServiceProvider.GetService<MessageFactory>();
 
             this.config = services.GetRequiredService<ClientConfiguration>();
+            this.clientMessagingOptions = services.GetRequiredService<IOptions<ClientMessagingOptions>>();
+
             this.GrainReferenceRuntime = this.ServiceProvider.GetRequiredService<IGrainReferenceRuntime>();
 
             services.GetService<TelemetryManager>()?.AddFromConfiguration(services, config.TelemetryConfiguration);
@@ -137,7 +141,8 @@ namespace Orleans
             this.assemblyProcessor = this.ServiceProvider.GetRequiredService<AssemblyProcessor>();
             this.assemblyProcessor.Initialize();
 
-            BufferPool.InitGlobalBufferPool(config);
+            var clientMessagingOptions = this.ServiceProvider.GetRequiredService<IOptions<ClientMessagingOptions>>();
+            BufferPool.InitGlobalBufferPool(clientMessagingOptions);
 
 
             try

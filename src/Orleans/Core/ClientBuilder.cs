@@ -35,8 +35,12 @@ namespace Orleans
             this.serviceProviderBuilder.ConfigureServices(
                 services =>
                 {
-                    services.TryAddSingleton(this.clientConfiguration ?? ClientConfiguration.StandardLoad());
-                    services.TryAddFromExisting<IMessagingConfiguration, ClientConfiguration>();
+                    
+                    var clientConfigurationToUse = clientConfiguration ?? ClientConfiguration.StandardLoad();
+
+                    services.TryAddSingleton(clientConfigurationToUse);
+                    services.TryAddSingleton(clientConfigurationToUse.CreateMessagingOptions<ClientMessagingOptions>());
+                    services.TryAddSingleton(clientConfigurationToUse.CreateSerializationProviderOptions());
                     services.TryAddFromExisting<ITraceConfiguration, ClientConfiguration>();
                 });
             this.serviceProviderBuilder.ConfigureServices(AddDefaultServices);

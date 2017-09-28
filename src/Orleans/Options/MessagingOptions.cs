@@ -8,7 +8,7 @@ namespace Orleans
     /// <summary>
     /// Specifies global messaging options that are common to client and silo.
     /// </summary>
-    public abstract class MessagingOptions
+    public class MessagingOptions
     {
         /// <summary>
         /// The OpenConnectionTimeout attribute specifies the timeout before a connection open is assumed to have failed

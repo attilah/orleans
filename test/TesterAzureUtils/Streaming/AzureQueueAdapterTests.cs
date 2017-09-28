@@ -17,6 +17,8 @@ using TestExtensions;
 using Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
+using Microsoft.Extensions.Options;
+using Orleans;
 
 namespace Tester.AzureUtils.Streaming
 {
@@ -39,9 +41,9 @@ namespace Tester.AzureUtils.Streaming
             this.fixture = fixture;
             this.deploymentId = MakeDeploymentId();
             this.loggerFactory = this.fixture.Services.GetService<ILoggerFactory>();
-            BufferPool.InitGlobalBufferPool(new MessagingConfiguration(false));
+            BufferPool.InitGlobalBufferPool(Options.Create(new ClientMessagingOptions()));
         }
-        
+
         public void Dispose()
         {
             AzureQueueStreamProviderUtils.DeleteAllUsedAzureQueues(this.loggerFactory, AZURE_QUEUE_STREAM_PROVIDER_NAME, deploymentId, TestDefaultConfiguration.DataConnectionString).Wait();

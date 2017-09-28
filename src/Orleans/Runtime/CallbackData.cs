@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Orleans.Runtime.Configuration;
 using Orleans.Transactions;
+using Microsoft.Extensions.Options;
 
 namespace Orleans.Runtime
 {
@@ -24,7 +25,7 @@ namespace Orleans.Runtime
         private readonly Func<Message, bool> resendFunc;
         private readonly Action<Message> unregister;
         private readonly TaskCompletionSource<object> context;
-        private readonly IMessagingConfiguration config;
+        private readonly MessagingOptions config;
 
         private bool alreadyFired;
         private TimeSpan timeout;
@@ -42,7 +43,7 @@ namespace Orleans.Runtime
             TaskCompletionSource<object> ctx, 
             Message msg, 
             Action<Message> unregisterDelegate,
-            IMessagingConfiguration config,
+            IOptions<MessagingOptions> config,
             Logger logger,
             ILogger timerLogger)
         {
@@ -57,7 +58,7 @@ namespace Orleans.Runtime
             Message = msg;
             unregister = unregisterDelegate;
             alreadyFired = false;
-            this.config = config;
+            this.config = config.Value;
             this.TransactionInfo = TransactionContext.GetTransactionInfo();
             this.timerLogger = timerLogger;
         }

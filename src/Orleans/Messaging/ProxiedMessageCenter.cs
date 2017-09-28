@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Orleans.Runtime;
 using Orleans.Runtime.Configuration;
 using Orleans.Serialization;
+using Microsoft.Extensions.Options;
 
 namespace Orleans.Messaging
 {
@@ -86,7 +87,7 @@ namespace Orleans.Messaging
         private readonly Logger logger;
         private readonly object lockable;
         public SiloAddress MyAddress { get; private set; }
-        public IMessagingConfiguration MessagingConfiguration { get; private set; }
+        public IOptions<MessagingOptions> MessagingConfiguration { get; private set; }
         private readonly QueueTrackingStatistic queueTracking;
         private int numberOfConnectedGateways = 0;
         private readonly MessageFactory messageFactory;
