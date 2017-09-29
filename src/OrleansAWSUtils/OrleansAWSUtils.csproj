@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <PackageId>Microsoft.Orleans.OrleansAWSUtils</PackageId>
+    <PackageId>Microsoft.Orleans.AWS</PackageId>
     <Title>Microsoft Orleans AWS Utilities</Title>
     <Description>Library of utility types for Amazon AWS of Microsoft Orleans.</Description>
     <PackageTags>$(PackageTags) AWS Amazon DynamoDB</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
-    <AssemblyName>OrleansAWSUtils</AssemblyName>
+    <AssemblyName>Microsoft.Orleans.AWS</AssemblyName>
     <RootNamespace>OrleansAWSUtils</RootNamespace>
   </PropertyGroup>
 

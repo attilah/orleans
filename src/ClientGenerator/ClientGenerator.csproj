@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <PackageId>Microsoft.Orleans.OrleansCodeGenerator.Build</PackageId>
+    <PackageId>Microsoft.Orleans.CodeGeneration.Build</PackageId>
     <Title>Microsoft Orleans Build-time Code Generation</Title>
     <Description>Microsoft Orleans Build-time Code Generation to install within the grain interfaces and implementation projects.</Description>
     <IsTool>true</IsTool>
@@ -9,8 +9,8 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Orleans.CodeGeneration</RootNamespace>
     <AssemblyName>ClientGenerator</AssemblyName>
+    <RootNamespace>Orleans.CodeGeneration</RootNamespace>
     <TargetFramework>net461</TargetFramework>
   </PropertyGroup>
 

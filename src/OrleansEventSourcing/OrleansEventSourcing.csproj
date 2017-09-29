@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AssemblyName>OrleansEventSourcing</AssemblyName>
+    <AssemblyName>Microsoft.Orleans.EventSourcing</AssemblyName>
     <RootNamespace>OrleansEventSourcing</RootNamespace>
   </PropertyGroup>
 

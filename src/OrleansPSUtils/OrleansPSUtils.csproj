@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <PackageId>Microsoft.Orleans.OrleansPSUtils</PackageId>
+    <PackageId>Microsoft.Orleans.PowerShell</PackageId>
     <Title>Microsoft Orleans PowerShell Utilities</Title>
     <Description>Library of utility types for PowerShell of Microsoft Orleans.</Description>
     <PackageTags>$(PackageTags) PowerShell</PackageTags>
@@ -9,7 +9,7 @@
 
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
-    <AssemblyName>OrleansPSUtils</AssemblyName>
+    <AssemblyName>Microsoft.Orleans.PowerShell</AssemblyName>
     <RootNamespace>OrleansPSUtils</RootNamespace>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
@@ -42,6 +42,6 @@
     <PropertyGroup>
       <VersionToEmbed>$(Version)</VersionToEmbed>
     </PropertyGroup>
-    <WriteLinesToFile File="$(OutDir)OrleansPSUtils.psd1" Lines="@(_PSDFileContent-&gt;Replace('$version$', '$(VersionToEmbed)'))" Overwrite="true" ContinueOnError="true" />
+    <WriteLinesToFile File="$(OutDir)Microsoft.Orleans.PowerShell.psd1" Lines="@(_PSDFileContent-&gt;Replace('$version$', '$(VersionToEmbed)'))" Overwrite="true" ContinueOnError="true" />
   </Target>
 </Project>

@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <PackageId>Microsoft.Orleans.OrleansServiceBus</PackageId>
-    <Title>Microsoft Orleans ServiceBus Utilities</Title>
-    <Description>Library of utility types for Microsoft Azure ServiceBus of Microsoft Orleans.</Description>
-    <PackageTags>$(PackageTags) Azure ServiceBus EventHubs</PackageTags>
+    <PackageId>Microsoft.Orleans.Streaming.EventHubs</PackageId>
+    <Title>Microsoft Orleans Streaming EventHubs Provider</Title>
+    <Description>Library of utility types for Microsoft Azure EventHubs of Microsoft Orleans.</Description>
+    <PackageTags>$(PackageTags) Azure EventHubs</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
-    <AssemblyName>OrleansServiceBus</AssemblyName>
+    <AssemblyName>Microsoft.Orleans.Streaming.EventHubs</AssemblyName>
     <RootNamespace>OrleansServiceBus</RootNamespace>
     <OrleansBuildTimeCodeGen>true</OrleansBuildTimeCodeGen>
   </PropertyGroup>

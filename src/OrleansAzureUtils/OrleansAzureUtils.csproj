@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <PackageId>Microsoft.Orleans.OrleansAzureUtils</PackageId>
+    <PackageId>Microsoft.Orleans.Azure</PackageId>
     <Title>Microsoft Orleans Azure Utilities</Title>
     <Description>Support library for hosting Orleans on Microsoft Azure.</Description>
     <PackageTags>$(PackageTags) Azure</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
-    <AssemblyName>OrleansAzureUtils</AssemblyName>
+    <AssemblyName>Microsoft.Orleans.Azure</AssemblyName>
     <RootNamespace>OrleansAzureUtils</RootNamespace>
     <OrleansBuildTimeCodeGen>true</OrleansBuildTimeCodeGen>
   </PropertyGroup>

@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <PackageId>Microsoft.Orleans.OrleansSQLUtils</PackageId>
+    <PackageId>Microsoft.Orleans.SQL</PackageId>
     <Title>Microsoft Orleans SQL Utilities</Title>
     <Description>Library of utility types for relational storage of Microsoft Orleans.</Description>
     <PackageTags>$(PackageTags) SQL</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
-    <AssemblyName>OrleansSQLUtils</AssemblyName>
+    <AssemblyName>Microsoft.Orleans.SQL</AssemblyName>
     <RootNamespace>OrleansSQLUtils</RootNamespace>
   </PropertyGroup>
 

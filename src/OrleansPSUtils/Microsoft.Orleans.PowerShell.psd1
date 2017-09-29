@@ -1,5 +1,5 @@
 ﻿@{
-	RootModule = 'OrleansPSUtils.dll'
+	RootModule = 'Microsoft.Orleans.PowerShell.dll'
 	ModuleVersion = '$version$'
 	GUID = 'afbcf490-ca4b-4039-9ffe-c6fec8a4f71b'
 	Author = 'Microsoft Orleans Team'
