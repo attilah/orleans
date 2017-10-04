@@ -77,7 +77,7 @@ namespace Orleans.CodeGeneration
                         SerializationProviders = config.Globals.SerializationProviders,
                         FallbackSerializationProvider = config.Globals.FallbackSerializationProvider
                     });
-                var codeGenerator = new RoslynCodeGenerator(new SerializationManager(null, serializationProviderOptions, null, loggerFactory), loggerFactory);
+                var codeGenerator = new RoslynCodeGenerator(new SerializationManager(null, serializationProviderOptions, loggerFactory), loggerFactory);
                 return codeGenerator.GenerateSourceForAssembly(grainAssembly);
             }
         }

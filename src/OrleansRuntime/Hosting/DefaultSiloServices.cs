@@ -74,7 +74,6 @@ namespace Orleans.Hosting
                     options.GatewaySenderQueues = Environment.ProcessorCount;
                 }
             });
-            services.TryAddFromExisting<ITraceConfiguration, NodeConfiguration>();
             services.TryAddSingleton<TelemetryManager>();
             services.TryAddFromExisting<ITelemetryProducer, TelemetryManager>();
 

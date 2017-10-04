@@ -133,7 +133,7 @@ namespace Orleans.Serialization
 
         #region Static initialization
 
-        public SerializationManager(IServiceProvider serviceProvider, IOptions<SerializationProviderOptions> serializatonProviderOptions, ITraceConfiguration traceConfig, ILoggerFactory loggerFactory)
+        public SerializationManager(IServiceProvider serviceProvider, IOptions<SerializationProviderOptions> serializatonProviderOptions, ILoggerFactory loggerFactory)
         {
             this.LargeObjectSizeThreshold = Constants.LARGE_OBJECT_HEAP_THRESHOLD;
             this.serializationContext = new ThreadLocal<SerializationContext>(() => new SerializationContext(this));
